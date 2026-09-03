@@ -109,7 +109,7 @@ export default async function handler(req, res) {
 
         // Send email via Resend
         const { data, error } = await resend.emails.send({
-          from: process.env.CONTACT_FORM_FROM || 'KHAHUS Consulting Solutions <onboarding@resend.dev>',
+          from: process.env.CONTACT_FORM_FROM || 'KHAHUS Consulting Solutions <updates@updates.khahusconsulting.com.ng>',
           to: [process.env.CONTACT_FORM_TO || 'info@khahusconsulting.com.ng'],
           reply_to: email.trim(),
           subject: `New enquiry: ${service.trim()}`,
