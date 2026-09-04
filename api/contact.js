@@ -7,9 +7,27 @@ const escapeHtml = (value = '') => value
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
 
+const defaultAllowedOrigins = [
+  'https://khahusconsulting.com.ng',
+  'https://www.khahusconsulting.com.ng',
+  'https://khahus-consulting-solutions.vercel.app',
+];
+
 export default async function handler(req, res) {
     // CORS configuration
-    res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || 'https://khahusconsulting.com.ng');
+    const allowedOrigins = [
+      ...(process.env.ALLOWED_ORIGIN || '').split(','),
+      ...defaultAllowedOrigins,
+    ]
+      .map((origin) => origin.trim())
+      .filter(Boolean);
+    const requestOrigin = req.headers?.origin;
+    const responseOrigin = allowedOrigins.includes(requestOrigin)
+      ? requestOrigin
+      : allowedOrigins[0];
+
+    res.setHeader('Access-Control-Allow-Origin', responseOrigin);
+    res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
     res.setHeader(
         'Access-Control-Allow-Headers',
